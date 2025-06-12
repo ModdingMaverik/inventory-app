@@ -1,4 +1,4 @@
-const API_URL = "AKfycbyQkpS5BnfNRKhfoHG4c-PjCgJYWhrYvbPS_pwUJ9w";
+const API_URL = "https://moddingmaverik.github.io/inventory-app/";
 
 fetch(API_URL)
   .then(res => res.json())
@@ -12,12 +12,13 @@ fetch(API_URL)
 
       const row = document.createElement('div');
       row.innerHTML = `
-        <strong>${item.Item}</strong> (${item.Unit})<br>
-        Par: ${item.Par}, Current: 
-        <input type="number" value="${item.Current}" onchange="updateItem('${item.Item}', this.value)">
-        → To Order: ${item['To Order']} @ $${item['Cost per Unit']} = $${orderCost.toFixed(2)}
-        <hr>
-      `;
+  <strong>${item.Item}</strong> (${item.Unit})<br>
+  Par: ${item.Par}, Current: 
+  <input type="number" value="${item.Current}" onchange="updateItem('${item.Item}', this.value)">
+  → To Order: ${item['To Order']}
+  @ $${item['Cost per Unit']} = $${item['Order Cost'].toFixed(2)}
+  <hr>
+`;
       container.appendChild(row);
     });
 
@@ -32,4 +33,12 @@ function updateItem(item, current) {
     body: JSON.stringify({ Item: item, Current: current }),
     headers: { "Content-Type": "application/json" }
   });
+let totalCost = 0;
+data.forEach(item => {
+  totalCost += parseFloat(item['Order Cost']) || 0;
+});
+const total = document.createElement('div');
+total.innerHTML = `<h3>Total Order Cost: $${totalCost.toFixed(2)}</h3>`;
+container.appendChild(total);
+
 }
