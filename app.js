@@ -1,4 +1,4 @@
-const API_URL = "https://moddingmaverik.github.io/inventory-app/";
+const API_URL = "AKfycbyQkpS5BnfNRKhfoHG4c-PjCgJYWhrYvbPS_pwUJ9w";
 
 fetch(API_URL)
   .then(res => res.json())
@@ -33,6 +33,29 @@ function updateItem(item, current) {
     body: JSON.stringify({ Item: item, Current: current }),
     headers: { "Content-Type": "application/json" }
   });
+  document.getElementById("addForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const form = e.target;
+  const data = {
+    type: "add",
+    item: form.item.value,
+    unit: form.unit.value,
+    category: form.category.value,
+    location: form.location.value,
+    par: parseFloat(form.par.value),
+    cost: parseFloat(form.cost.value)
+  };
+
+  fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: { "Content-Type": "application/json" }
+  }).then(() => {
+    alert("Item added! Reloading...");
+    location.reload();
+  });
+});
+
 let totalCost = 0;
 data.forEach(item => {
   totalCost += parseFloat(item['Order Cost']) || 0;
